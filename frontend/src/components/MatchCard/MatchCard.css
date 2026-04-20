@@ -1,0 +1,129 @@
+.match-card {
+  min-width: 350px;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, border-color 0.3s;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.match-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-red);
+}
+
+.match-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.team-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.team-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.team-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.clickable {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.clickable:hover {
+  color: var(--accent-red);
+}
+
+.match-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 80px;
+}
+
+.match-score {
+  font-size: 2.2rem;
+  font-weight: 900;
+  display: flex;
+  gap: 10px;
+}
+
+.score-divider {
+  color: var(--accent-red);
+}
+
+.vs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vs-text {
+  font-weight: 800;
+  color: var(--text-gray);
+  font-size: 1.4rem;
+}
+
+.live-indicator {
+  background: var(--accent-red);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  margin-top: 4px;
+}
+
+.match-meta {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.match-status {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--text-gray);
+}
+
+.status-live {
+  color: var(--accent-red);
+}
+
+.match-date {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+}
+
+.broadcaster-logo {
+  height: 12px;
+  opacity: 0.6;
+}
+
+@media (max-width: 480px) {
+  .match-card {
+    min-width: 280px;
+  }
+}

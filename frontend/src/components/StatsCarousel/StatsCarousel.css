@@ -1,0 +1,126 @@
+.stats-carousel-section {
+  background-color: #0b0f14;
+  padding: 4rem 2rem;
+  width: 100%;
+  margin-bottom: 3rem; /* Separación con la siguiente sección */
+}
+
+.stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stats-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 2.5rem;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+.stats-slider {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0.5rem 2rem;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.stats-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.stats-slider::-webkit-scrollbar-thumb {
+  background: #2e303a;
+  border-radius: 10px;
+}
+
+.stats-card {
+  min-width: 180px;
+  background-color: #1a1f26;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.stats-card:hover {
+  transform: scale(1.05);
+  background-color: #252b34;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.stats-rank {
+  color: #9ca3af;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.stats-logo-box {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stats-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+.stats-name {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.stats-pts {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stats-footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.full-stats-link {
+  color: var(--accent-red);
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.full-stats-link:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .stats-title {
+    font-size: 1.8rem;
+  }
+  
+  .stats-card {
+    min-width: 150px;
+    padding: 1rem;
+  }
+}

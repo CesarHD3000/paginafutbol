@@ -1,0 +1,131 @@
+.home-container {
+  width: 100%;
+}
+
+.home-hero {
+  height: 450px;
+  background: linear-gradient(rgba(0,0,0,0.4), var(--bg-dark)), url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=2000') center/cover;
+  display: flex;
+  align-items: flex-end;
+  padding: 4rem 2rem;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-tag {
+  background: var(--accent-red);
+  color: white;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.home-hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.home-hero p {
+  color: var(--text-gray);
+  font-size: 1.2rem;
+  max-width: 600px;
+}
+
+.home-sections {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 0; /* Quitar padding lateral para que el carrusel de clasificación respire */
+}
+
+.results-section, .upcoming-section {
+  padding: 0 1rem;
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 4px solid var(--accent-red);
+}
+
+.view-all {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-gray);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-all:hover {
+  border-color: var(--text-white);
+  color: var(--text-white);
+}
+
+.matches-carousel {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+}
+
+.matches-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.empty-msg {
+  color: var(--text-gray);
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* Loading & Error */
+.loading-container, .error-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bg-card);
+  border-top-color: var(--accent-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.retry-btn {
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-top: 1rem;
+  cursor: pointer;
+}

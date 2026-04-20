@@ -1,0 +1,66 @@
+:root {
+  /* Bundesliga Palette */
+  --bg-dark: #16171d;
+  --bg-card: #1f2028;
+  --accent-red: #d0021b;
+  --text-white: #f3f4f6;
+  --text-gray: #9ca3af;
+  --border-color: #2e303a;
+  
+  --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  font-family: var(--sans);
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Scrollbar global */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-gray);
+}

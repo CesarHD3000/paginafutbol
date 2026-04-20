@@ -1,0 +1,299 @@
+Desarrollar un sistema web completo para la gestión de una liga de fútbol local, priorizando una arquitectura escalable que permita evolucionar hacia funcionalidades en tiempo real (“live”) en el futuro. El sistema debe construirse con un enfoque profesional, modular y mantenible.
+
+---
+
+# 🎯 OBJETIVO GENERAL
+
+Crear una plataforma web que permita:
+
+* Visualización pública de:
+
+  * Tabla de posiciones
+  * Equipos
+  * Jugadores
+  * Partidos
+  * Estadísticas (goleadores, asistencias)
+
+* Gestión privada mediante un panel administrador:
+
+  * Creación de equipos
+  * Registro de jugadores
+  * Creación y gestión de partidos
+  * Registro de eventos (goles, asistencias, tarjetas)
+
+El sistema debe ser inicialmente operado de forma manual por un administrador, pero diseñado bajo un modelo “event-driven” que permita integrar funcionalidades en tiempo real en el futuro sin rediseñar la base.
+
+---
+
+# 🧱 STACK TECNOLÓGICO
+
+## Frontend
+
+* React (con Vite)
+* CSS puro (modular o global, sin frameworks obligatorios)
+* Consumo de API REST
+
+## Backend
+
+* Node.js con Express
+* Arquitectura MVC o modular (controllers, routes, services)
+
+## Base de Datos
+
+* PostgreSQL
+* Diseño normalizado (3FN)
+
+## Almacenamiento de imágenes
+
+* Servicio externo (ej: Cloudinary o similar)
+* La base de datos solo almacena URLs
+
+---
+
+# 🗂️ MODELO DE DATOS (NORMALIZADO)
+
+## Tabla: equipos
+
+* id (PK)
+* nombre (VARCHAR, único)
+* logo_url (TEXT)
+* created_at (TIMESTAMP)
+
+---
+
+## Tabla: jugadores
+
+* id (PK)
+* nombre (VARCHAR)
+* numero (INT)
+* equipo_id (FK → equipos.id)
+* foto_url (TEXT)
+* created_at (TIMESTAMP)
+
+Relación:
+
+* Un equipo tiene muchos jugadores (1:N)
+
+---
+
+## Tabla: partidos
+
+* id (PK)
+* equipo_local_id (FK → equipos.id)
+* equipo_visitante_id (FK → equipos.id)
+* fecha (TIMESTAMP)
+* estado (ENUM: pendiente, en_vivo, finalizado)
+* goles_local (INT, default 0)
+* goles_visitante (INT, default 0)
+* minuto_actual (INT, nullable)
+* created_at (TIMESTAMP)
+
+Relación:
+
+* Un partido involucra dos equipos
+
+---
+
+## Tabla: eventos (CLAVE DEL SISTEMA)
+
+* id (PK)
+* partido_id (FK → partidos.id)
+* jugador_id (FK → jugadores.id)
+* tipo (ENUM: gol, asistencia, tarjeta_amarilla, tarjeta_roja)
+* minuto (INT)
+* created_at (TIMESTAMP)
+
+Relación:
+
+* Un partido tiene muchos eventos (1:N)
+* Un jugador puede tener muchos eventos (1:N)
+
+---
+
+# ⚙️ LÓGICA DEL SISTEMA
+
+## PRINCIPIO FUNDAMENTAL
+
+El sistema es “event-driven”:
+
+* No se almacenan estadísticas agregadas (goleadores, tabla, etc.)
+* Todo se calcula a partir de:
+
+  * partidos
+  * eventos
+
+---
+
+## ACTUALIZACIÓN DE MARCADOR
+
+Cuando se registra un evento tipo “gol”:
+
+1. Se guarda en tabla eventos
+2. Se identifica el equipo del jugador
+3. Se actualiza el marcador en la tabla partidos:
+
+   * goles_local o goles_visitante
+
+---
+
+## TABLA DE POSICIONES (NO persistente)
+
+Se calcula dinámicamente:
+
+* partidos ganados → 3 puntos
+* empate → 1 punto
+* derrota → 0 puntos
+
+Debe considerar:
+
+* puntos
+* diferencia de goles
+* goles a favor
+
+---
+
+## GOLEADORES Y ASISTENCIAS
+
+Consultas basadas en eventos:
+
+* Goles → COUNT(eventos WHERE tipo = 'gol')
+* Asistencias → COUNT(eventos WHERE tipo = 'asistencia')
+
+---
+
+# 🔐 PANEL ADMIN (DENTRO DEL MISMO SISTEMA)
+
+## Acceso restringido:
+
+* Ruta: /admin
+* Autenticación con login (JWT o sesión)
+* Solo usuarios autorizados pueden modificar datos
+
+---
+
+## FUNCIONALIDADES
+
+### Equipos
+
+* Crear equipo
+* Subir logo
+
+### Jugadores
+
+* Crear jugador
+* Asignar a equipo
+
+### Partidos
+
+* Crear partido
+* Definir equipos y fecha
+
+### Gestión de partido (pantalla clave)
+
+* Ver marcador en tiempo real (manual)
+
+* Cambiar estado:
+
+  * pendiente
+  * en_vivo
+  * finalizado
+
+* Agregar eventos:
+
+  * gol
+  * asistencia
+  * tarjeta
+
+---
+
+## FLUJO DE USO
+
+1. Admin crea equipos
+2. Admin crea jugadores
+3. Admin crea partido
+4. Durante o después del partido:
+
+   * Admin agrega eventos manualmente
+5. El sistema:
+
+   * actualiza marcador
+   * recalcula estadísticas
+
+---
+
+# 🌐 FRONTEND PÚBLICO
+
+## Vistas necesarias
+
+### Home
+
+* partidos recientes
+* próximos partidos
+
+### Tabla de posiciones
+
+* dinámica desde backend
+
+### Equipos
+
+* listado con logos
+
+### Partidos
+
+* listado + detalle
+
+### Estadísticas
+
+* goleadores
+* asistencias
+
+---
+
+# 🧠 DISEÑO UX
+
+## Panel Admin
+
+* interfaz rápida y simple
+* acciones mediante botones (no formularios largos)
+* feedback inmediato
+
+## Público
+
+* visual limpio
+* jerarquía clara (marcadores destacados)
+* navegación simple
+
+---
+
+# 🚀 ESCALABILIDAD FUTURA (LIVE)
+
+El sistema debe permitir integrar:
+
+* WebSockets (ej: Socket.io)
+
+Debido a que:
+
+* ya existe modelo de eventos
+* ya existe estado del partido
+
+Solo se requerirá emitir eventos en tiempo real desde backend.
+
+---
+
+# ⚠️ CONSIDERACIONES IMPORTANTES
+
+* No guardar datos derivados (tabla, goleadores)
+* Evitar duplicación de datos
+* Validar integridad referencial (FK)
+* Manejar errores del admin (editar/eliminar eventos)
+* Separar completamente frontend público y panel admin
+
+---
+
+# 🎯 RESULTADO ESPERADO
+
+Un sistema funcional, escalable y mantenible que permita:
+
+* Gestión completa de una liga local
+* Operación manual eficiente
+* Base sólida para evolucionar a sistema en vivo

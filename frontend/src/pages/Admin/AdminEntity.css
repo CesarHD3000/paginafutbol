@@ -1,0 +1,143 @@
+.admin-entity-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.entity-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.entity-form-section {
+  background-color: var(--bg-card);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 3rem;
+}
+
+.entity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.save-btn {
+  background-color: var(--accent-red);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-gray);
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.entity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.entity-card {
+  background-color: var(--bg-card);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.entity-logo-preview {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  background-color: var(--bg-dark);
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.entity-info {
+  flex: 1;
+}
+
+.entity-info h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.sub-info {
+  font-size: 0.8rem;
+  color: var(--text-gray);
+}
+
+.player-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background-color: var(--accent-red);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.entity-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.edit-icon-btn, .delete-icon-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-gray);
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.edit-icon-btn:hover {
+  border-color: var(--text-white);
+  color: var(--text-white);
+}
+
+.delete-icon-btn:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+@media (max-width: 600px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
