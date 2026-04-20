@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const morgan = require('morgan');
 require('dotenv').config();
 
 const db = require('./config/db');
@@ -17,15 +18,21 @@ const app = express();
 const path = require('path');
 
 // Middlewares de seguridad y utilidad
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }));
+app.use(morgan('dev'));
 app.use(express.json());
 
-// Servir archivos estáticos (FOTOS)
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Servir archivos estáticos (FOTOS) con CORS habilitado
+app.use('/uploads', (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  next();
+}, express.static(path.join(__dirname, '../uploads')));
 
 // Definir rutas
 app.use('/api/auth', authRoutes);

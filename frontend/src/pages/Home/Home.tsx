@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css';
-import { fetchRecientes, fetchProximos, fetchTabla, fetchCategorias } from '../../services/api';
+import { fetchRecientes, fetchProximos, fetchTabla, fetchCategorias, getImageUrl } from '../../services/api';
 import MatchCard from '../../components/MatchCard/MatchCard';
 import StatsCarousel from '../../components/StatsCarousel/StatsCarousel';
 import UpcomingCard from '../../components/UpcomingCard/UpcomingCard';
@@ -21,7 +21,7 @@ interface Partido {
 interface EquipoTabla {
   equipo_id: number;
   nombre: string;
-  logo_url: string;
+  logo_path: string;
   pts: number;
   pj: number;
 }
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
         <StatsCarousel equipos={tabla.map(t => ({
           id: t.equipo_id,
           nombre: t.nombre,
-          logo_url: t.logo_url,
+          logo_url: getImageUrl(t.logo_path),
           puntos: t.pts,
           partidos_jugados: t.pj
         }))} />

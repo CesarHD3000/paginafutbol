@@ -1,5 +1,19 @@
-const API_URL = 'http://localhost:3000/api';
-const BASE_URL = 'http://localhost:3000'; // Para las rutas de imágenes
+// Usar variables de entorno si existen, de lo contrario usar localhost (Online ready)
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL || 'http://localhost:3000';
+
+// --- UTILIDADES ---
+export const getImageUrl = (path: string | null) => {
+  if (!path) return 'https://via.placeholder.com/150?text=SIN+IMAGEN';
+  
+  // Si ya tiene una URL completa (http://...), la devolvemos tal cual
+  if (path.startsWith('http')) return path;
+
+  // Limpiamos el path para asegurar que no haya dobles barras
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+  
+  return `${BASE_URL}/${cleanPath}`;
+};
 
 // --- CATEGORÍAS ---
 export const fetchCategorias = async () => {
@@ -52,7 +66,6 @@ export const fetchClubes = async () => {
   return response.json();
 };
 
-// Nota: Para archivos usamos FormData, por lo que NO enviamos Content-Type header (el navegador lo pone solo)
 export const createClub = async (formData: FormData) => {
   const response = await fetch(`${API_URL}/equipos/clubes`, {
     method: 'POST',
@@ -252,7 +265,7 @@ export const deleteEvento = async (id: number) => {
   return response.json();
 };
 
-// --- JUGADORES (RUT como PK) ---
+// --- JUGADORES ---
 export const fetchJugadores = async (clubId?: string) => {
   const url = clubId ? `${API_URL}/jugadores?club_id=${clubId}` : `${API_URL}/jugadores`;
   const response = await fetch(url);
@@ -308,11 +321,6 @@ export const fetchEquipoPublico = async (id: string) => {
   return response.json();
 };
 
-export const getImageUrl = (path: string | null) => {
-  if (!path) return 'https://via.placeholder.com/150?text=SIN+IMAGEN';
-  return `${BASE_URL}${path}`;
-};
-
 // --- AUTENTICACIÓN ---
 export const login = async (credentials: any) => {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -325,4 +333,24 @@ export const login = async (credentials: any) => {
     throw new Error(error.message || 'Error en el login');
   }
   return response.json();
+};
+
+// --- VERIFICACIÓN DE SESIÓN ---
+export const verifyToken = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) return { valid: false };
+
+  try {
+    const response = await fetch(`${API_URL}/auth/verify`, {
+      method: 'GET',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) return { valid: false };
+    return await response.json();
+  } catch (error) {
+    return { valid: false };
+  }
 };

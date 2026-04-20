@@ -1,0 +1,199 @@
+/* JugadorAdmin.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.jugador-admin-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1f26 100%);
+  color: #fff;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.jugador-admin-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Títulos */
+.jugador-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.jugador-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Card del Formulario */
+.jugador-card {
+  background: rgba(26, 31, 38, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.jugador-card h3 {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.jugador-card h3::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  background: #ff3d3d;
+  border-radius: 2px;
+}
+
+/* Layout del Formulario */
+.jugador-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* RUT grande, Número pequeño */
+  gap: 25px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Inputs Modernos */
+.modern-input, .modern-select {
+  background: #0f1216;
+  border: 2px solid #2d3748;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.modern-input:focus, .modern-select:focus {
+  border-color: #ff3d3d;
+  box-shadow: 0 0 0 4px rgba(255, 61, 61, 0.1);
+}
+
+.modern-input::placeholder {
+  color: #475569;
+}
+
+/* Estilo Custom para Input de Archivo */
+.file-upload-wrapper {
+  position: relative;
+  border: 2px dashed #2d3748;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.file-upload-wrapper:hover {
+  border-color: #ff3d3d;
+  background: rgba(255, 61, 61, 0.02);
+}
+
+.file-upload-wrapper input[type="file"] {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.file-info i {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+/* Vista Previa de Imagen */
+.preview-box {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-top: 10px;
+  border: 1px solid #2d3748;
+}
+
+/* Botón Principal */
+.btn-submit {
+  grid-column: span 2;
+  background: #ff3d3d;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 10px;
+  box-shadow: 0 10px 15px -3px rgba(255, 61, 61, 0.3);
+}
+
+.btn-submit:hover {
+  background: #e03535;
+  transform: translateY(-3px);
+  box-shadow: 0 20px 25px -5px rgba(255, 61, 61, 0.4);
+}
+
+.btn-submit:active {
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background: transparent;
+  color: #64748b;
+  border: none;
+  margin-top: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .jugador-form {
+    grid-template-columns: 1fr;
+  }
+  .btn-submit, .full-width {
+    grid-column: span 1;
+  }
+}

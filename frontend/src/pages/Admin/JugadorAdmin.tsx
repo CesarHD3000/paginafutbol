@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { fetchJugadores, createJugador, updateJugador, deleteJugador, fetchClubes, getImageUrl } from '../../services/api';
-import './AdminEntity.css';
+import React, { useEffect, useState, useRef } from 'react';
+import { fetchClubes, fetchJugadores, createJugador, updateJugador, deleteJugador, getImageUrl } from '../../services/api';
+import './JugadorAdmin.css';
 
 const JugadorAdmin: React.FC = () => {
   const [jugadores, setJugadores] = useState<any[]>([]);
@@ -8,19 +8,23 @@ const JugadorAdmin: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editingRut, setEditingRut] = useState<string | null>(null);
 
-  // Form states
+  // Estados del Formulario
   const [rut, setRut] = useState('');
   const [nombre, setNombre] = useState('');
-  const [numero, setNumero] = useState(0);
+  const [numero, setNumero] = useState('');
   const [clubId, setClubId] = useState('');
-  const [fotoFile, setFotoFile] = useState<File | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [currentFotoPath, setCurrentFotoPath] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadData = async () => {
     try {
       const [jData, cData] = await Promise.all([fetchJugadores(), fetchClubes()]);
       setJugadores(jData);
       setClubes(cData);
+      if (cData.length > 0) setClubId(cData[0].id.toString());
     } catch (err) {
       console.error(err);
     } finally {
@@ -32,21 +36,37 @@ const JugadorAdmin: React.FC = () => {
     loadData();
   }, []);
 
+  // Vista previa de imagen
+  useEffect(() => {
+    if (!logoFile) {
+      setPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(logoFile);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [logoFile]);
+
+  const resetForm = () => {
+    setRut('');
+    setNombre('');
+    setNumero('');
+    if (clubes.length > 0) setClubId(clubes[0].id.toString());
+    setLogoFile(null);
+    setPreviewUrl(null);
+    setCurrentFotoPath(null);
+    setEditingRut(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clubId) return alert('Debes seleccionar un club');
-
     const formData = new FormData();
     formData.append('rut', rut);
     formData.append('nombre', nombre);
-    formData.append('numero', numero.toString());
+    formData.append('numero', numero);
     formData.append('club_id', clubId);
-    
-    if (fotoFile) {
-      formData.append('foto', fotoFile);
-    } else if (currentFotoPath) {
-      formData.append('foto_path', currentFotoPath);
-    }
+    if (logoFile) formData.append('foto', logoFile);
 
     try {
       if (editingRut) {
@@ -61,126 +81,147 @@ const JugadorAdmin: React.FC = () => {
     }
   };
 
-  const resetForm = () => {
-    setRut('');
-    setNombre('');
-    setNumero(0);
-    setClubId('');
-    setFotoFile(null);
-    setCurrentFotoPath(null);
-    setEditingRut(null);
-  };
-
   const handleEdit = (j: any) => {
     setEditingRut(j.rut);
     setRut(j.rut);
     setNombre(j.nombre);
-    setNumero(j.numero);
+    setNumero(j.numero.toString());
     setClubId(j.club_id.toString());
-    setCurrentFotoPath(j.foto_path || null);
-    setFotoFile(null);
+    setCurrentFotoPath(j.foto_path);
+    setLogoFile(null);
   };
 
-  const handleDelete = async (rutToDelete: string) => {
+  const handleDelete = async (rut: string) => {
     if (!confirm('¿Eliminar jugador?')) return;
     try {
-      await deleteJugador(rutToDelete);
+      await deleteJugador(rut);
       loadData();
     } catch (err) {
-      alert('Error al eliminar');
+      alert('Error al eliminar jugador');
     }
   };
 
-  if (loading) return <div className="loading">Cargando jugadores...</div>;
+  if (loading) return <div className="loading">Cargando gestión...</div>;
 
   return (
-    <div className="admin-entity-container">
-      <header className="entity-header">
-        <h1>Gestión de Jugadores</h1>
-      </header>
+    <div className="jugador-admin-container">
+      <div className="jugador-admin-content">
+        <header className="jugador-header">
+          <h1>Gestión de Jugadores</h1>
+        </header>
 
-      <section className="entity-form-section">
-        <h3>{editingRut ? 'Editar Jugador' : 'Nuevo Jugador'}</h3>
-        <form onSubmit={handleSubmit} className="entity-form">
-          <div className="form-row-2">
+        <section className="jugador-card">
+          <h3>{editingRut ? 'Editando Jugador' : 'Nuevo Jugador'}</h3>
+          
+          <form onSubmit={handleSubmit} className="jugador-form">
+            {/* RUT - Columna 1 */}
             <div className="form-group">
-              <label>RUT (Sin puntos, con guión)</label>
+              <label>RUT (Identificación)</label>
               <input 
                 type="text" 
                 value={rut} 
                 onChange={(e) => setRut(e.target.value)} 
-                placeholder="12345678-9"
+                placeholder="12.345.678-9" 
+                className="modern-input"
+                disabled={!!editingRut}
                 required 
-                disabled={!!editingRut} // El RUT no se edita, es la identidad
               />
             </div>
+
+            {/* Número - Columna 2 */}
             <div className="form-group">
-              <label>Número de Camiseta</label>
+              <label>N° Camiseta</label>
               <input 
                 type="number" 
                 value={numero} 
-                onChange={(e) => setNumero(parseInt(e.target.value))} 
+                onChange={(e) => setNumero(e.target.value)} 
+                placeholder="10" 
+                className="modern-input"
                 required 
               />
             </div>
-          </div>
-          <div className="form-group">
-            <label>Nombre Completo</label>
-            <input 
-              type="text" 
-              value={nombre} 
-              onChange={(e) => setNombre(e.target.value)} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Club</label>
-            <select 
-              value={clubId} 
-              onChange={(e) => setClubId(e.target.value)} 
-              required
-            >
-              <option value="">Selecciona un club</option>
-              {clubes.map(c => (
-                <option key={c.id} value={c.id}>{c.nombre}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Foto del Jugador</label>
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={(e) => setFotoFile(e.target.files ? e.target.files[0] : null)} 
-            />
-            {currentFotoPath && !fotoFile && <p className="file-hint">Mantiene foto actual</p>}
-          </div>
-          <div className="form-actions">
-            <button type="submit" className="save-btn">{editingRut ? 'ACTUALIZAR' : 'CREAR'}</button>
-            {editingRut && <button type="button" onClick={resetForm} className="cancel-btn">CANCELAR</button>}
-          </div>
-        </form>
-      </section>
 
-      <section className="entity-list-section">
-        <div className="entity-grid">
-          {jugadores.map(j => (
-            <div key={j.rut} className="entity-card">
-              <div className="player-badge">#{j.numero}</div>
-              <img src={getImageUrl(j.foto_path)} alt={j.nombre} className="entity-logo-preview" />
-              <div className="entity-info">
-                <h4>{j.nombre}</h4>
-                <p className="sub-info-rut">{j.rut}</p>
-                <span className="sub-info">{j.club_nombre}</span>
-              </div>
-              <div className="entity-actions">
-                <button onClick={() => handleEdit(j)} className="edit-icon-btn">✎</button>
-                <button onClick={() => handleDelete(j.rut)} className="delete-icon-btn">🗑</button>
-              </div>
+            {/* Nombre - Fila Completa */}
+            <div className="form-group full-width">
+              <label>Nombre Completo</label>
+              <input 
+                type="text" 
+                value={nombre} 
+                onChange={(e) => setNombre(e.target.value)} 
+                placeholder="Nombre del deportista" 
+                className="modern-input"
+                required 
+              />
             </div>
-          ))}
-        </div>
-      </section>
+
+            {/* Club - Fila Completa */}
+            <div className="form-group full-width">
+              <label>Club de Pertenencia</label>
+              <select 
+                value={clubId} 
+                onChange={(e) => setClubId(e.target.value)}
+                className="modern-select"
+              >
+                {clubes.map(c => (
+                  <option key={c.id} value={c.id}>{c.nombre}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Foto - Fila Completa */}
+            <div className="form-group full-width">
+              <label>Fotografía de Jugador</label>
+              <div className="file-upload-wrapper">
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={(e) => setLogoFile(e.target.files ? e.target.files[0] : null)} 
+                />
+                <div className="file-info">
+                  <i>📷</i>
+                  <span>{logoFile ? logoFile.name : 'Haz clic para seleccionar o arrastra una imagen'}</span>
+                </div>
+              </div>
+              
+              {/* Previews */}
+              {previewUrl && <img src={previewUrl} className="preview-box" alt="Nueva" />}
+              {currentFotoPath && !logoFile && (
+                <div style={{marginTop: '10px'}}>
+                  <p style={{fontSize: '0.7rem', color: '#64748b'}}>Foto Actual:</p>
+                  <img src={getImageUrl(currentFotoPath)} className="preview-box" alt="Actual" />
+                </div>
+              )}
+            </div>
+
+            <button type="submit" className="btn-submit">
+              {editingRut ? 'Guardar Cambios' : 'Crear Jugador'}
+            </button>
+          </form>
+
+          {editingRut && (
+            <button className="btn-cancel" onClick={resetForm}>Cancelar Edición</button>
+          )}
+        </section>
+
+        {/* Listado Simplificado (Opcional según tu diseño, pero útil para editar) */}
+        <section style={{marginTop: '50px'}} className="jugador-card">
+          <h3 style={{marginBottom: '20px'}}>Jugadores Registrados</h3>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+            {jugadores.map(j => (
+              <div key={j.rut} style={{display: 'flex', justifyContent: 'space-between', padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px'}}>
+                <div>
+                  <span style={{fontWeight: '700'}}>{j.numero}</span> - {j.nombre} ({j.club_nombre})
+                </div>
+                <div style={{display: 'flex', gap: '10px'}}>
+                  <button onClick={() => handleEdit(j)} style={{background: 'none', border: 'none', color: '#4CAF50', cursor: 'pointer'}}>EDITAR</button>
+                  <button onClick={() => handleDelete(j.rut)} style={{background: 'none', border: 'none', color: '#ff3d3d', cursor: 'pointer'}}>ELIMINAR</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

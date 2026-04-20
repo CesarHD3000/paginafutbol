@@ -30,6 +30,7 @@
   font-weight: 900;
   color: var(--text-white);
   letter-spacing: -1px;
+  text-decoration: none;
 }
 
 .nav-logo span {
@@ -45,6 +46,9 @@
 .nav-links {
   display: flex;
   gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li a {
@@ -53,6 +57,7 @@
   font-weight: 700;
   color: var(--text-white);
   transition: color 0.2s;
+  text-decoration: none;
 }
 
 .nav-links li a:hover {
@@ -106,6 +111,87 @@
 .admin-btn:hover {
   background: var(--bg-card);
   color: var(--text-white);
+}
+
+/* --- ADMIN DROPDOWN MENU --- */
+.admin-menu-wrapper {
+  position: relative;
+}
+
+.admin-menu-trigger {
+  background: transparent;
+  border: none;
+  color: var(--text-gray);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.admin-menu-trigger:hover, .admin-menu-trigger.active {
+  background: var(--bg-card);
+  color: var(--accent-red);
+}
+
+.admin-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 260px;
+  background: #1a1f26;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  z-index: 1100;
+  animation: dropdownFade 0.2s ease-out;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  padding: 10px 15px;
+  font-weight: 800;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  color: #f1f5f9;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item i {
+  font-style: normal;
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 61, 61, 0.1);
+  color: #ff3d3d;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 8px 10px;
 }
 
 @media (max-width: 768px) {

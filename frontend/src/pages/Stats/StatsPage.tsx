@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchTabla, fetchCategorias } from '../../services/api';
+import { fetchTabla, fetchCategorias, getImageUrl } from '../../services/api';
 import { Link } from 'react-router-dom';
 import './StatsPage.css';
 
@@ -11,7 +11,7 @@ interface Category {
 interface TeamStats {
   equipo_id: number;
   nombre: string;
-  logo_url: string;
+  logo_path: string;
   pj: number;
   pg: number;
   pe: number;
@@ -21,6 +21,7 @@ interface TeamStats {
   dg: number;
   pts: number;
 }
+
 
 const StatsPage: React.FC = () => {
   const [tabla, setTabla] = useState<TeamStats[]>([]);
@@ -115,7 +116,7 @@ const StatsPage: React.FC = () => {
                       </td>
                       <td className="col-team">
                         <div className="team-link">
-                          <img src={team.logo_url || 'https://via.placeholder.com/30'} alt={team.nombre} />
+                          <img src={getImageUrl(team.logo_path)} alt={team.nombre} />
                           <span className="team-name">{team.nombre}</span>
                         </div>
                       </td>

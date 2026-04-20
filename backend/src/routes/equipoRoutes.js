@@ -3,11 +3,12 @@ const router = express.Router();
 const equipoController = require('../controllers/equipoController');
 const { auth, checkRole } = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
+const { equipoValidation } = require('../middlewares/validator');
 
 // Clubes
 router.get('/clubes', equipoController.getClubes);
-router.post('/clubes', auth, checkRole(['admin']), upload.single('logo'), equipoController.createClub);
-router.put('/clubes/:id', auth, checkRole(['admin']), upload.single('logo'), equipoController.updateClub);
+router.post('/clubes', auth, checkRole(['admin']), upload.single('logo'), equipoValidation, equipoController.createClub);
+router.put('/clubes/:id', auth, checkRole(['admin']), upload.single('logo'), equipoValidation, equipoController.updateClub);
 router.delete('/clubes/:id', auth, checkRole(['admin']), equipoController.deleteClub);
 router.get('/clubes/:id/public', equipoController.getClubPublico);
 

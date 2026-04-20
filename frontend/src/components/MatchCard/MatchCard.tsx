@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../services/api';
 import './MatchCard.css';
 
 interface Partido {
@@ -28,7 +29,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ partido }) => {
     <div className={`match-card ${isEnVivo ? 'is-live' : ''}`}>
       <div className="match-teams">
         <Link to={`/club/${partido.equipo_local_id}`} className="team-info clickable">
-          <img src={partido.local_logo || 'https://via.placeholder.com/60'} alt={partido.local} className="team-logo" />
+          <img src={getImageUrl(partido.local_logo)} alt={partido.local} className="team-logo" />
           <span className="team-name">{partido.local}</span>
         </Link>
         
@@ -48,7 +49,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ partido }) => {
         </div>
 
         <Link to={`/club/${partido.equipo_visitante_id}`} className="team-info clickable">
-          <img src={partido.visitante_logo || 'https://via.placeholder.com/60'} alt={partido.visitante} className="team-logo" />
+          <img src={getImageUrl(partido.visitante_logo)} alt={partido.visitante} className="team-logo" />
           <span className="team-name">{partido.visitante}</span>
         </Link>
       </div>

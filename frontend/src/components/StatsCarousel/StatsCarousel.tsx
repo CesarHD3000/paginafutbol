@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../services/api';
 import './StatsCarousel.css';
 
 interface EquipoTabla {
@@ -25,7 +26,7 @@ const StatsCarousel: React.FC<StatsCarouselProps> = ({ equipos }) => {
             <Link key={equipo.id} to={`/club/${equipo.id}`} className="stats-card">
               <span className="stats-rank">{index + 1}.</span>
               <div className="stats-logo-box">
-                <img src={equipo.logo_url || 'https://via.placeholder.com/60'} alt={equipo.nombre} className="stats-logo" />
+                <img src={getImageUrl(equipo.logo_url)} alt={equipo.nombre} className="stats-logo" />
               </div>
               <h3 className="stats-name">{equipo.nombre}</h3>
               <span className="stats-pts">{equipo.puntos} Pts</span>

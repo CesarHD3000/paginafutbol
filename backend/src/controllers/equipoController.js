@@ -56,7 +56,6 @@ const updateClub = async (req, res) => {
 const deleteClub = async (req, res) => {
   const { id } = req.params;
   try {
-    // Nota: La base de datos debería tener ON DELETE CASCADE o manejaremos el error si hay equipos asociados
     await db.query('DELETE FROM clubes WHERE id = $1', [id]);
     res.json({ message: 'Club eliminado correctamente' });
   } catch (err) {
@@ -67,11 +66,9 @@ const deleteClub = async (req, res) => {
 
 // --- GESTIÓN DE EQUIPOS (CLUB + CATEGORÍA) ---
 
-// Inscribir un club en una categoría (Crea un "Equipo")
 const createEquipo = async (req, res) => {
   const { club_id, categoria_id } = req.body;
   try {
-    // Validar si ya existe la inscripción
     const existe = await db.query('SELECT * FROM equipos WHERE club_id = $1 AND categoria_id = $2', [club_id, categoria_id]);
     if (existe.rows.length > 0) {
       return res.status(400).json({ message: 'El club ya está inscrito en esta categoría' });
@@ -88,7 +85,6 @@ const createEquipo = async (req, res) => {
   }
 };
 
-// Eliminar inscripción de un club en una categoría
 const deleteEquipo = async (req, res) => {
   const { id } = req.params;
   try {
@@ -96,16 +92,15 @@ const deleteEquipo = async (req, res) => {
     res.json({ message: 'Inscripción eliminada correctamente' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al eliminar la inscripción. Verifique que el equipo no tenga partidos registrados.' });
+    res.status(500).json({ message: 'Error al eliminar la inscripción.' });
   }
 };
 
-// Obtener equipos por categoría (Para tablas de posiciones)
 const getEquiposPorCategoria = async (req, res) => {
   const { categoria_id } = req.params;
   try {
     const result = await db.query(`
-      SELECT e.id as equipo_id, c.nombre, c.logo_url, c.color_principal
+      SELECT e.id as equipo_id, c.nombre, c.logo_path, c.color_principal
       FROM equipos e
       JOIN clubes c ON e.club_id = c.id
       WHERE e.categoria_id = $1
@@ -118,7 +113,6 @@ const getEquiposPorCategoria = async (req, res) => {
   }
 };
 
-// Obtener tabla de posiciones por categoría (Lógica principal del producto)
 const getTablaPosiciones = async (req, res) => {
   const { categoria_id } = req.params;
   
@@ -132,7 +126,7 @@ const getTablaPosiciones = async (req, res) => {
         SELECT 
           e.id as equipo_id,
           cl.nombre,
-          cl.logo_url,
+          cl.logo_path,
           SUM(CASE WHEN p.estado = 'finalizado' THEN 1 ELSE 0 END) as pj,
           SUM(CASE 
             WHEN p.estado = 'finalizado' AND (
@@ -163,7 +157,7 @@ const getTablaPosiciones = async (req, res) => {
         JOIN clubes cl ON e.club_id = cl.id
         LEFT JOIN partidos p ON (p.equipo_local_id = e.id OR p.equipo_visitante_id = e.id) AND p.categoria_id = $1
         WHERE e.categoria_id = $1
-        GROUP BY e.id, cl.nombre, cl.logo_url
+        GROUP BY e.id, cl.nombre, cl.logo_path
       )
       SELECT 
         *,
@@ -175,7 +169,6 @@ const getTablaPosiciones = async (req, res) => {
     
     const result = await db.query(query, [categoria_id]);
     
-    // Aseguramos que todos los campos numéricos sean devueltos como Number
     const formattedTable = result.rows.map(row => ({
       ...row,
       pj: parseInt(row.pj || 0),
@@ -191,14 +184,10 @@ const getTablaPosiciones = async (req, res) => {
     res.json(formattedTable);
   } catch (err) {
     console.error('❌ Error crítico en getTablaPosiciones:', err.message);
-    res.status(500).json({ 
-      message: 'Error interno al generar la tabla de posiciones',
-      error: err.message 
-    });
+    res.status(500).json({ message: 'Error interno al generar la tabla de posiciones' });
   }
 };
 
-// Obtener información pública detallada de un CLUB (Antiguo getEquipoPublico)
 const getClubPublico = async (req, res) => {
   const { id } = req.params;
   try {
@@ -207,11 +196,10 @@ const getClubPublico = async (req, res) => {
 
     const jugadoresResult = await db.query('SELECT * FROM jugadores WHERE club_id = $1 ORDER BY numero ASC', [id]);
     
-    // Partidos de TODAS las categorías donde participe el club
     const partidosResult = await db.query(`
       SELECT p.*, 
              c1.nombre as local, c2.nombre as visitante, 
-             c1.logo_url as local_logo, c2.logo_url as visitante_logo,
+             c1.logo_path as local_logo, c2.logo_path as visitante_logo,
              cat.nombre as categoria_nombre
       FROM partidos p
       JOIN equipos e1 ON p.equipo_local_id = e1.id

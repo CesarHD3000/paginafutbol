@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../services/api';
 import './UpcomingCard.css';
 
 interface Partido {
@@ -28,11 +29,11 @@ const UpcomingCard: React.FC<UpcomingCardProps> = ({ partido }) => {
       
       <div className="upcoming-logos-box">
         <Link to={`/club/${partido.equipo_local_id}`}>
-          <img src={partido.local_logo || 'https://via.placeholder.com/50'} alt={partido.local} className="upcoming-logo local" />
+          <img src={getImageUrl(partido.local_logo)} alt={partido.local} className="upcoming-logo local" />
         </Link>
         <span className="upcoming-vs-badge">VS</span>
         <Link to={`/club/${partido.equipo_visitante_id}`}>
-          <img src={partido.visitante_logo || 'https://via.placeholder.com/50'} alt={partido.visitante} className="upcoming-logo visitante" />
+          <img src={getImageUrl(partido.visitante_logo)} alt={partido.visitante} className="upcoming-logo visitante" />
         </Link>
       </div>
 

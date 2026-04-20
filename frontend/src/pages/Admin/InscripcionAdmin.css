@@ -1,0 +1,236 @@
+/* InscripcionAdmin.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+.inscripcion-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f0f 0%, #0a192f 100%);
+  color: #fff;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.inscripcion-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Títulos y Cabecera */
+.inscripcion-header {
+  margin-bottom: 50px;
+}
+
+.inscripcion-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.inscripcion-header p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  font-weight: 400;
+}
+
+/* Selector de Categoría */
+.category-select-wrapper {
+  margin-bottom: 40px;
+  background: rgba(26, 31, 38, 0.7);
+  padding: 25px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.category-select-wrapper label {
+  font-weight: 600;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modern-select {
+  background: #1a1f26;
+  color: #fff;
+  border: 2px solid #2d3748;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  min-width: 300px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px;
+}
+
+.modern-select:hover, .modern-select:focus {
+  border-color: #ff3d3d;
+  box-shadow: 0 0 15px rgba(255, 61, 61, 0.2);
+}
+
+/* Dashboard Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.dashboard-card {
+  background: rgba(20, 26, 35, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-card h3 {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 30px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-card h3::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Listado de Clubes */
+.club-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.club-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: transparent;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.club-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.club-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.club-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.club-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #f1f5f9;
+}
+
+/* Botones Modernos */
+.btn-modern {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  outline: none;
+}
+
+.btn-inscribir {
+  background: #ff3d3d;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 61, 61, 0.15);
+}
+
+.btn-inscribir:hover {
+  background: #e03535;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 61, 61, 0.3);
+}
+
+.btn-inscribir:active {
+  transform: translateY(0);
+}
+
+.btn-quitar {
+  background: transparent;
+  color: #ff3d3d;
+  border: 2px solid rgba(255, 61, 61, 0.3);
+}
+
+.btn-quitar:hover {
+  background: #ff3d3d;
+  color: #fff;
+  border-color: #ff3d3d;
+  box-shadow: 0 6px 15px rgba(255, 61, 61, 0.2);
+}
+
+.empty-state {
+  color: #475569;
+  text-align: center;
+  font-style: italic;
+  padding: 40px 0;
+  font-size: 0.9rem;
+}
+
+/* Scrollbar personalizada para las listas */
+.club-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.club-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.club-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.club-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}

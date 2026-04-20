@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchCategorias, fetchClubes, fetchEquiposPorCategoria, createEquipo, deleteEquipo } from '../../services/api';
-import './AdminEntity.css';
+import { fetchCategorias, fetchClubes, fetchEquiposPorCategoria, createEquipo, deleteEquipo, getImageUrl } from '../../services/api';
+import './InscripcionAdmin.css';
 
 const InscripcionAdmin: React.FC = () => {
   const [categorias, setCategorias] = useState<any[]>([]);
@@ -61,61 +61,82 @@ const InscripcionAdmin: React.FC = () => {
 
   if (loading) return <div className="loading">Cargando datos...</div>;
 
-  // Filtrar clubes que aún NO están inscritos en esta categoría
   const clubesDisponibles = clubes.filter(c => 
     !equiposInscritos.some(ei => ei.nombre === c.nombre)
   );
 
   return (
-    <div className="admin-entity-container">
-      <header className="entity-header">
-        <h1>Inscripciones por Categoría</h1>
-        <p>Vincula los clubes a las categorías donde competirán</p>
-      </header>
+    <div className="inscripcion-container">
+      <div className="inscripcion-content">
+        <header className="inscripcion-header">
+          <h1>Inscripciones por Categoría</h1>
+          <p>Gestiona la vinculación de clubes a las categorías de competición oficial</p>
+        </header>
 
-      <section className="category-selector-section">
-        <label>Seleccionar Categoría:</label>
-        <select 
-          value={selectedCategoria} 
-          onChange={(e) => setSelectedCategoria(e.target.value)}
-          className="admin-select"
-        >
-          {categorias.map(c => (
-            <option key={c.id} value={c.id}>{c.nombre}</option>
-          ))}
-        </select>
-      </section>
-
-      <div className="inscription-grid">
-        <section className="inscription-column">
-          <h3>Clubes Inscritos</h3>
-          <div className="inscription-list">
-            {equiposInscritos.length === 0 ? <p className="empty-msg">No hay clubes inscritos en esta categoría</p> : 
-              equiposInscritos.map(ei => (
-                <div key={ei.equipo_id} className="inscription-item">
-                  <img src={ei.logo_url} alt="" />
-                  <span>{ei.nombre}</span>
-                  <button onClick={() => handleEliminarInscripcion(ei.equipo_id)} className="remove-btn">QUITAR</button>
-                </div>
-              ))
-            }
-          </div>
+        <section className="category-select-wrapper">
+          <label>Categoría Seleccionada</label>
+          <select 
+            value={selectedCategoria} 
+            onChange={(e) => setSelectedCategoria(e.target.value)}
+            className="modern-select"
+          >
+            {categorias.map(c => (
+              <option key={c.id} value={c.id}>{c.nombre}</option>
+            ))}
+          </select>
         </section>
 
-        <section className="inscription-column">
-          <h3>Clubes Disponibles</h3>
-          <div className="inscription-list">
-            {clubesDisponibles.length === 0 ? <p className="empty-msg">Todos los clubes están inscritos</p> : 
-              clubesDisponibles.map(c => (
-                <div key={c.id} className="inscription-item">
-                  <img src={c.logo_url} alt="" />
-                  <span>{c.nombre}</span>
-                  <button onClick={() => handleInscribir(c.id)} className="add-btn">INSCRIBIR</button>
-                </div>
-              ))
-            }
-          </div>
-        </section>
+        <div className="dashboard-grid">
+          {/* COLUMNA IZQUIERDA: INSCRITOS */}
+          <section className="dashboard-card">
+            <h3>Clubes Inscritos</h3>
+            <div className="club-list">
+              {equiposInscritos.length === 0 ? (
+                <p className="empty-state">No hay clubes registrados en esta categoría</p>
+              ) : (
+                equiposInscritos.map(ei => (
+                  <div key={ei.equipo_id} className="club-item">
+                    <div className="club-info">
+                      <img src={getImageUrl(ei.logo_path)} alt="" className="club-logo" />
+                      <span className="club-name">{ei.nombre}</span>
+                    </div>
+                    <button 
+                      onClick={() => handleEliminarInscripcion(ei.equipo_id)} 
+                      className="btn-modern btn-quitar"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
+          {/* COLUMNA DERECHA: DISPONIBLES */}
+          <section className="dashboard-card">
+            <h3>Clubes Disponibles</h3>
+            <div className="club-list">
+              {clubesDisponibles.length === 0 ? (
+                <p className="empty-state">Todos los clubes han sido inscritos</p>
+              ) : (
+                clubesDisponibles.map(c => (
+                  <div key={c.id} className="club-item">
+                    <div className="club-info">
+                      <img src={getImageUrl(c.logo_path)} alt="" className="club-logo" />
+                      <span className="club-name">{c.nombre}</span>
+                    </div>
+                    <button 
+                      onClick={() => handleInscribir(c.id)} 
+                      className="btn-modern btn-inscribir"
+                    >
+                      Inscribir
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

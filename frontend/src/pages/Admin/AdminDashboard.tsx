@@ -31,10 +31,10 @@ const AdminDashboard: React.FC = () => {
         <h1>Panel de Administración</h1>
         <p>Selecciona un partido para gestionar eventos y resultados</p>
         <div className="admin-quick-actions">
-          <Link to="/admin/clubes" className="action-btn">GESTIONAR CLUBES</Link>
-          <Link to="/admin/categorias" className="action-btn">GESTIONAR CATEGORÍAS</Link>
-          <Link to="/admin/inscripciones" className="action-btn">GESTIONAR INSCRIPCIONES</Link>
-          <Link to="/admin/jugadores" className="action-btn">GESTIONAR JUGADORES</Link>
+          <Link to="/admin/clubes" className="quick-manage-btn">GESTIONAR CLUBES</Link>
+          <Link to="/admin/categorias" className="quick-manage-btn">GESTIONAR CATEGORÍAS</Link>
+          <Link to="/admin/inscripciones" className="quick-manage-btn">GESTIONAR INSCRIPCIONES</Link>
+          <Link to="/admin/jugadores" className="quick-manage-btn">GESTIONAR JUGADORES</Link>
         </div>
       </header>
 

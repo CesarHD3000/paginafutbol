@@ -8,8 +8,8 @@ const getRecientes = async (req, res) => {
       SELECT p.*, 
              c1.nombre as local, 
              c2.nombre as visitante,
-             c1.logo_url as local_logo,
-             c2.logo_url as visitante_logo,
+             c1.logo_path as local_logo,
+             c2.logo_path as visitante_logo,
              cat.nombre as categoria_nombre
       FROM partidos p
       JOIN equipos e1 ON p.equipo_local_id = e1.id
@@ -44,8 +44,8 @@ const getProximos = async (req, res) => {
       SELECT p.*, 
              c1.nombre as local, 
              c2.nombre as visitante,
-             c1.logo_url as local_logo,
-             c2.logo_url as visitante_logo,
+             c1.logo_path as local_logo,
+             c2.logo_path as visitante_logo,
              cat.nombre as categoria_nombre
       FROM partidos p
       JOIN equipos e1 ON p.equipo_local_id = e1.id
@@ -137,8 +137,8 @@ const getDetalle = async (req, res) => {
       SELECT p.*, 
              c1.nombre as local, 
              c2.nombre as visitante,
-             c1.logo_url as local_logo,
-             c2.logo_url as visitante_logo,
+             c1.logo_path as local_logo,
+             c2.logo_path as visitante_logo,
              cat.nombre as categoria_nombre,
              c1.id as local_club_id,
              c2.id as visitante_club_id

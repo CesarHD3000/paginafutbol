@@ -39,6 +39,19 @@ const login = async (req, res) => {
   }
 };
 
+const verify = async (req, res) => {
+  try {
+    // El middleware 'auth' ya decodificó el token y lo puso en req.user
+    res.json({ 
+      valid: true, 
+      user: req.user 
+    });
+  } catch (err) {
+    res.status(401).json({ valid: false, message: 'Token inválido' });
+  }
+};
+
 module.exports = {
-  login
+  login,
+  verify
 };
