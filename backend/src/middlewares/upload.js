@@ -1,11 +1,19 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
-// Asegurar que la carpeta de uploads existe
-const uploadDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// En Vercel (serverless), la única carpeta con permiso de escritura es /tmp
+const uploadDir = process.env.VERCEL 
+  ? path.join(os.tmpdir(), 'uploads') 
+  : path.join(__dirname, '../../uploads');
+
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('⚠️ No se pudo crear el directorio de uploads:', err.message);
 }
 
 const storage = multer.diskStorage({
