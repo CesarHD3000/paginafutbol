@@ -1,12 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
   const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  // Sincronizar estado de admin cada vez que cambie la ruta o el almacenamiento
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      const userData = userStr ? JSON.parse(userStr) : null;
+      
+      setUser(userData);
+      setIsAdmin(!!(token && userData && userData.role === 'admin'));
+    };
+
+    checkAuth();
+    
+    // Escuchar cambios de storage (por si se loguea en otra pestaña)
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
+  }, [location]); // Se ejecuta cada vez que cambiamos de página
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsAdmin(false);
+    setUser(null);
+    setShowAdminMenu(false);
+    navigate('/');
+  };
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
@@ -43,47 +73,7 @@ const Navbar: React.FC = () => {
         <div className="nav-actions">
           <img src="/LOGO-ARFA-scaled.png" alt="ARFA Logo" className="logo-arfa" />
           
-          {/* Solo mostramos el menú de gestión si hay token (sesión activa) */}
-          {token && (
-            <div className="admin-menu-wrapper" ref={menuRef}>
-              <button 
-                className={`admin-menu-trigger ${showAdminMenu ? 'active' : ''}`}
-                onClick={() => setShowAdminMenu(!showAdminMenu)}
-                title="Menú de Gestión"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7"></rect>
-                  <rect x="14" y="3" width="7" height="7"></rect>
-                  <rect x="14" y="14" width="7" height="7"></rect>
-                  <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-              </button>
-
-              {showAdminMenu && (
-                <div className="admin-dropdown">
-                  <div className="dropdown-header">Gestión Administrativa</div>
-                  <Link to="/admin" className="dropdown-item">
-                    <i>🏠</i> Panel Principal
-                  </Link>
-                  <div className="dropdown-divider"></div>
-                  <Link to="/admin/clubes" className="dropdown-item">
-                    <i>🛡️</i> Gestionar Clubes
-                  </Link>
-                  <Link to="/admin/categorias" className="dropdown-item">
-                    <i>🏆</i> Gestionar Categorías
-                  </Link>
-                  <Link to="/admin/inscripciones" className="dropdown-item">
-                    <i>📝</i> Gestionar Inscripciones
-                  </Link>
-                  <Link to="/admin/jugadores" className="dropdown-item">
-                    <i>🏃</i> Gestionar Jugadores
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
-          <Link to="/admin" className="admin-btn" title="Perfil Admin">
+          <Link to="/admin" className="admin-btn" title={isAdmin ? `Sesión iniciada como ${user.username}` : "Acceso Administrativo"}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>

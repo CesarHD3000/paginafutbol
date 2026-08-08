@@ -38,13 +38,26 @@ const validarRUT = (rut) => {
 };
 
 /**
- * Limpia el RUT para dejarlo en formato estandarizado (XXXXXXXX-X)
+ * Limpia el RUT para dejarlo en formato estandarizado (XX.XXX.XXX-X)
  */
 const formatRUT = (rut) => {
-  let valor = rut.replace(/\./g, '').replace('-', '').toUpperCase();
+  if (!rut) return rut;
+  
+  // Limpiar todo lo que no sea número o K
+  let valor = rut.replace(/[^0-9kK]/g, '').toUpperCase();
+  
+  if (valor.length < 2) return valor;
+
   let cuerpo = valor.slice(0, -1);
   let dv = valor.slice(-1);
-  return `${cuerpo}-${dv}`;
+  
+  // Formatear cuerpo con puntos
+  let result = '';
+  for (let i = cuerpo.length - 1, j = 0; i >= 0; i--, j++) {
+    result = cuerpo.charAt(i) + (j > 0 && j % 3 === 0 ? '.' : '') + result;
+  }
+  
+  return `${result}-${dv}`;
 };
 
 module.exports = { validarRUT, formatRUT };

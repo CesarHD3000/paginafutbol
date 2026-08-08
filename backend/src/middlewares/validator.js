@@ -1,4 +1,5 @@
 const { body, param, query, validationResult } = require('express-validator');
+const { validarRUT, formatRUT } = require('../utils/rutValidator');
 
 // Función genérica para manejar errores de validación
 const validate = (req, res, next) => {
@@ -24,7 +25,15 @@ const loginValidation = [
 const jugadorValidation = [
   body('rut')
     .notEmpty().withMessage('El RUT es obligatorio')
-    .trim(),
+    .trim()
+    .isLength({ max: 12 }).withMessage('El RUT no puede tener más de 12 caracteres')
+    .customSanitizer(value => formatRUT(value))
+    .custom((value) => {
+      if (!validarRUT(value)) {
+        throw new Error('El formato del RUT no es válido o el dígito verificador es incorrecto');
+      }
+      return true;
+    }),
   body('nombre')
     .notEmpty().withMessage('El nombre es obligatorio')
     .isLength({ min: 3, max: 100 }).withMessage('El nombre debe tener entre 3 y 100 caracteres')

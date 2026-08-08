@@ -8,6 +8,7 @@ const db = require('./config/db');
 
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
+const { authLimiter } = require('./middlewares/rateLimiter');
 const partidoRoutes = require('./routes/partidoRoutes');
 const eventoRoutes = require('./routes/eventoRoutes');
 const equipoRoutes = require('./routes/equipoRoutes');
@@ -56,14 +57,18 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Probar conexión a la DB al arrancar
-const PORT = process.env.PORT || 3000;
+module.exports = app;
 
-app.listen(PORT, async () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  try {
-    await db.query('SELECT NOW()');
-  } catch (err) {
-    console.error('⚠️ No se pudo conectar a la base de datos. Revisa tu .env');
-  }
-});
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, async () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    try {
+      await db.query('SELECT NOW()');
+    } catch (err) {
+      console.error('⚠️ No se pudo conectar a la base de datos. Revisa tu .env');
+    }
+  });
+}
+

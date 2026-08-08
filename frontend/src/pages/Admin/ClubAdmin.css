@@ -67,7 +67,7 @@
 .club-card-item:hover {
   background: rgba(255, 255, 255, 0.05);
   transform: translateX(5px);
-  border-color: rgba(255, 61, 61, 0.3);
+  border-color: #22c55e;
 }
 
 .logo-container {
@@ -127,11 +127,12 @@
   font-size: 1rem;
 }
 
-.edit-btn:hover { color: #4CAF50; border-color: #4CAF50; }
+.edit-btn:hover { color: #22c55e; border-color: #22c55e; }
 .delete-btn:hover { color: #ff3d3d; border-color: #ff3d3d; }
 
 /* Estilos de inputs mantenidos */
 .modern-input { background: #0f1216; border: 2px solid #2d3748; border-radius: 8px; padding: 12px; color: #fff; }
-.btn-create { background: #ff3d3d; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.btn-create { background: #22c55e; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.btn-create:hover { background: #16a34a; }
 .btn-clear { background: transparent; border: 1px solid #2d3748; color: #94a3b8; padding: 14px; border-radius: 8px; cursor: pointer; }
 .file-upload-custom { background: #0f1216; border: 2px dashed #2d3748; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; }

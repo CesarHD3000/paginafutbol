@@ -34,11 +34,12 @@
   display: flex;
   gap: 10px;
   margin-top: 1rem;
+  
 }
 
 .save-btn {
   background-color: var(--accent-red);
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   padding: 12px 24px;
   border-radius: 4px;

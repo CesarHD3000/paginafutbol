@@ -19,6 +19,29 @@ const JugadorAdmin: React.FC = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Función para formatear RUT en el frontend
+  const formatRUTString = (value: string) => {
+    let raw = value.replace(/[^0-9kK]/g, '').toUpperCase();
+    if (raw.length > 9) raw = raw.slice(0, 9);
+    if (raw.length < 2) return raw;
+    const cuerpo = raw.slice(0, -1);
+    const dv = raw.slice(-1);
+    let result = '';
+    for (let i = cuerpo.length - 1, j = 0; i >= 0; i--, j++) {
+      result = cuerpo.charAt(i) + (j > 0 && j % 3 === 0 ? '.' : '') + result;
+    }
+    return `${result}-${dv}`;
+  };
+
+  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length < rut.length) {
+      setRut(value.toUpperCase());
+    } else {
+      setRut(formatRUTString(value));
+    }
+  };
+
   const loadData = async () => {
     try {
       const [jData, cData] = await Promise.all([fetchJugadores(), fetchClubes()]);
@@ -120,9 +143,10 @@ const JugadorAdmin: React.FC = () => {
               <input 
                 type="text" 
                 value={rut} 
-                onChange={(e) => setRut(e.target.value)} 
+                onChange={handleRutChange} 
                 placeholder="12.345.678-9" 
                 className="modern-input"
+                maxLength={12}
                 disabled={!!editingRut}
                 required 
               />
@@ -204,7 +228,7 @@ const JugadorAdmin: React.FC = () => {
           )}
         </section>
 
-        {/* Listado Simplificado (Opcional según tu diseño, pero útil para editar) */}
+        {/* Listado Simplificado */}
         <section style={{marginTop: '50px'}} className="jugador-card">
           <h3 style={{marginBottom: '20px'}}>Jugadores Registrados</h3>
           <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>

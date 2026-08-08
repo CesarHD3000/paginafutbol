@@ -75,8 +75,8 @@
 }
 
 .modern-select:hover, .modern-select:focus {
-  border-color: #ff3d3d;
-  box-shadow: 0 0 15px rgba(255, 61, 61, 0.2);
+  border-color: #22c55e;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
 }
 
 /* Dashboard Layout */
@@ -172,16 +172,16 @@
 }
 
 .btn-inscribir {
-  background: #ff3d3d;
+  background: #22c55e;
   color: #fff;
   border: none;
-  box-shadow: 0 4px 12px rgba(255, 61, 61, 0.15);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
 }
 
 .btn-inscribir:hover {
-  background: #e03535;
+  background: #16a34a;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 61, 61, 0.3);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
 }
 
 .btn-inscribir:active {
